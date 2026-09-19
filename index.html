@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Space Marine Detachments — 11th Edition</title>
+<style>
+  :root {
+    --bg: #f6f7f9;
+    --panel: #ffffff;
+    --ink: #16181d;
+    --muted: #5d6470;
+    --line: #d9dde3;
+    --accent: #7a1420;
+    --accent-ink: #ffffff;
+    --row-alt: #f0f2f5;
+    --chip: #e9ecf1;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #14161a;
+      --panel: #1c1f25;
+      --ink: #e8eaee;
+      --muted: #9aa2af;
+      --line: #2e333c;
+      --accent: #b02434;
+      --accent-ink: #ffffff;
+      --row-alt: #212530;
+      --chip: #2a2f38;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #14161a;
+    --panel: #1c1f25;
+    --ink: #e8eaee;
+    --muted: #9aa2af;
+    --line: #2e333c;
+    --accent: #b02434;
+    --accent-ink: #ffffff;
+    --row-alt: #212530;
+    --chip: #2a2f38;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 24px 16px 64px;
+    background: var(--bg);
+    color: var(--ink);
+    font: 15px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  .wrap { max-width: 1040px; margin: 0 auto; }
+  h1 { font-size: 22px; margin: 0 0 4px; letter-spacing: .01em; }
+  .sub { color: var(--muted); font-size: 13px; margin: 0 0 20px; }
+  .sub a { color: inherit; }
+
+  .controls {
+    display: flex; flex-direction: column; gap: 12px;
+    background: var(--panel); border: 1px solid var(--line); border-radius: 8px;
+    padding: 12px; margin-bottom: 14px;
+  }
+  .field { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+  .field > label, .field > .grouplabel {
+    font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted);
+  }
+  .topline { display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap; }
+  .topline .field { flex: 1 1 220px; }
+  input {
+    font: inherit; color: var(--ink); background: var(--bg);
+    border: 1px solid var(--line); border-radius: 5px; padding: 7px 9px; width: 100%;
+  }
+  button {
+    font: inherit; color: var(--ink); background: var(--chip);
+    border: 1px solid var(--line); border-radius: 5px; padding: 7px 11px;
+    cursor: pointer; white-space: nowrap;
+  }
+  button:hover { border-color: var(--accent); }
+  button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+  .toggles { display: flex; flex-wrap: wrap; gap: 6px; }
+  .toggle {
+    border-radius: 999px; padding: 4px 12px; font-size: 13px;
+  }
+  .toggle[aria-pressed="true"] {
+    background: var(--accent); border-color: var(--accent); color: var(--accent-ink);
+  }
+  .hint { color: var(--muted); font-size: 11px; font-style: italic; }
+
+  .count { color: var(--muted); font-size: 13px; margin: 0 0 8px; }
+
+  .tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); }
+  table { border-collapse: collapse; width: 100%; min-width: 640px; }
+  th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  thead th {
+    position: sticky; top: 0; background: var(--accent); color: var(--accent-ink);
+    font-size: 12px; text-transform: uppercase; letter-spacing: .07em;
+    cursor: pointer; user-select: none; white-space: nowrap;
+  }
+  thead th .arrow { opacity: .45; font-size: 10px; margin-left: 5px; }
+  thead th[aria-sort="ascending"] .arrow,
+  thead th[aria-sort="descending"] .arrow { opacity: 1; }
+  tbody tr:nth-child(even) { background: var(--row-alt); }
+  tbody tr:last-child td { border-bottom: 0; }
+  td a { color: var(--ink); text-decoration-color: var(--muted); text-underline-offset: 2px; }
+  td a:hover { color: var(--accent); }
+  .dp { font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .chip {
+    display: inline-block; background: var(--chip); border-radius: 999px;
+    padding: 1px 9px; font-size: 12px; margin: 1px 3px 1px 0; white-space: nowrap;
+  }
+  .join { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .06em; margin: 0 2px; }
+  .empty { padding: 28px 12px; text-align: center; color: var(--muted); }
+
+  @media (max-width: 560px) {
+    .field { flex: 1 1 100%; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Space Marine Detachments — 11th Edition</h1>
+  <p class="sub">All 34 detachments from <a href="https://www.tabletopbattles.com/tabletop-battles-covers-the-11th-edition-space-marines-codex" target="_blank" rel="noopener">Tabletop Battles' Codex Space Marines coverage</a>. Click a column header to sort, toggle any number of filter chips to narrow down, and click a name to open its Detachment Focus article.</p>
+
+  <div class="controls">
+    <div class="topline">
+      <div class="field">
+        <label for="f-name">Name</label>
+        <input id="f-name" type="search" placeholder="Search detachments…" autocomplete="off">
+      </div>
+      <button id="reset" type="button">Reset filters</button>
+    </div>
+    <div class="field">
+      <span class="grouplabel" id="lbl-cost">Cost <span class="hint">— pick any number</span></span>
+      <div class="toggles" id="f-cost" role="group" aria-labelledby="lbl-cost"></div>
+    </div>
+    <div class="field">
+      <span class="grouplabel" id="lbl-disp">Force disposition <span class="hint">— pick any number</span></span>
+      <div class="toggles" id="f-disp" role="group" aria-labelledby="lbl-disp"></div>
+    </div>
+    <div class="field">
+      <span class="grouplabel" id="lbl-faction">Faction <span class="hint">— pick any number</span></span>
+      <div class="toggles" id="f-faction" role="group" aria-labelledby="lbl-faction"></div>
+    </div>
+  </div>
+
+  <p class="count" id="count"></p>
+
+  <div class="tablewrap">
+    <table>
+      <thead>
+        <tr>
+          <th data-key="name" aria-sort="ascending">Name<span class="arrow">▲</span></th>
+          <th data-key="dp">Cost<span class="arrow">▲</span></th>
+          <th data-key="disp">Force disposition(s)<span class="arrow">▲</span></th>
+          <th data-key="faction">Faction<span class="arrow">▲</span></th>
+        </tr>
+      </thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+const DATA = [
+  {
+    "name": "Angelic Inheritors",
+    "dp": 3,
+    "dispositions": [
+      "Priority Assets",
+      "Purge the Foe"
+    ],
+    "dispositionText": "Purge the Foe or Priority Assets",
+    "faction": "Blood Angels",
+    "kind": "Datasheet",
+    "unique": null,
+    "url": "https://www.tabletopbattles.com/detachment-focus-angelic-inheritors/"
+  },
+  {
+    "name": "Assault Brethren",
+    "dp": 1,
+    "dispositions": [
+      "Take and Hold"
+    ],
+    "dispositionText": "Take and Hold",
+    "faction": "Generic",
+    "kind": "Core",
+    "unique": "DOCTRINES",
+    "url": "https://www.tabletopbattles.com/detachment-focus-assault-brethren/"
+  },
+  {
+    "name": "Black Spear Task Force",
+    "dp": 3,
+    "dispositions": [
+      "Priority Assets",
+      "Purge the Foe"
+    ],
+    "dispositionText": "Priority Assets or Purge the Foe",
+    "faction": "Deathwatch",
+    "kind": "Datasheet",
+    "unique": null,
+    "url": "https://www.tabletopbattles.com/detachment-focus-black-spear-task-force/"
+  },
+  {
+    "name": "Blade of Ultramar",
+    "dp": 3,
+    "dispositions": [
+      "Take and Hold",
+      "Priority Assets"
+    ],
+    "dispositionText": "Priority Assets and Take and Hold",
+    "faction": "Ultramarines",
+    "kind": "Datasheet",
+    "unique": null,
+    "url": "https://www.tabletopbattles.com/detachment-focus-blade-of-ultramar/"
+  },
+  {
+    "name": "Ceramite Sentinels",
+    "dp": 2,
+    "dispositions": [
+      "Take and Hold"
+    ],
+    "dispositionText": "Take and Hold",
+    "faction": "Imperial Fists",
+    "kind": "Datasheet",
+    "unique": null,
+    "url": "https://www.tabletopbattles.com/detachment-focus-ceramite-sentinels/"
+  },
+  {
+    "name": "Champions of Fenris",
+    "dp": 1,
+    "dispositions": [
+      "Priority Assets"
+    ],
+    "dispositionText": "Priority Assets",
+    "faction": "Space Wolves",
+    "kind": "Datasheet",
+    "unique": null,
+    "url": "https://www.tabletopbattles.com/detachment-focus-champions-of-fenris/"
+  },
+  {
+    "name": "Darkflight Pursuit",
+    "dp": 1,
+    "dispositions": [
+      "Reconnaissance"
+    ],
+    "dispositionText": "Reconnaissance",
+    "faction": "Dark Angels",
+    "kind": "Datasheet",
+    "unique": null,
+    "url": "https://www.tabletopbattles.com/detachment-focus-darkflight-pursuit/"
+  },
+  {
+    "name": "Deathwatch Support",
+    "dp": 1,
+    "dispositions": [
+      "Disruption"
+    ],
+    "dispositionText": "Disruption",
+    "faction": "Deathwatch",
+    "kind": "Datasheet",
+    "unique": null,
+    "url": "https://www.tabletopbattles.com/detachment-focus-deathwatch-support/"
+  },
+  {
+    "name": "Devastator Brethren",
+    "dp": 1,
+    "dispositions": [
+      "Purge the Foe"
+    ],
+    "dispositionText": "Purge the Foe",
+    "faction": "Generic",
+    "kind": "Core",
+    "unique": "DOCTRINES",
+    "url": "https://www.tabletopbattles.com/detachment-focus-devastator-brethren/"
+  },
+  {
+    "name": "Encarmine Speartip",
+    "dp": 1,
+    "dispositions": [
+      "Disruption"
+    ],
+    "dispositionText": "Disruption",
+    "faction": "Blood Angels",
+    "kind": "Datasheet",
+    "unique": null,
+    "url": "https://www.tabletopbattles.com/detachment-focus-encarmine-speartip/"
+  },
+  {
+    "name": "Fist of the God-Emperor",
+    "dp": 1,
+    "dispositions": [
+      "Take and Hold"
+    ],
+    "dispositionText": "Take and Hold",
+    "faction": "Black Templars",
+    "kind": "Datasheet",
+    "unique": null,
+    "url": "https://www.tabletopbattles.com/detachment-focus-fist-of-the-god-emperor/"
+  },
+  {
+    "name": "Forgefather's Seekers",
+    "dp": 2,
+    "dispositions": [
+      "Priority Assets"
+    ],
+    "dispositionText": "Priority Assets",
+    "faction": "Salamanders",
+    "kind": "Datasheet",
+    "unique": null,
+    "url": "https://www.tabletopbattles.com/detachment-focus-forgefathers-seekers/"
+  },
+  {
+    "name": "Gauntlet Task Force",
+    "dp": 1,
+    "dispositions": [
+      "Reconnaissance"
+    ],
+    "dispositionText": "Reconnaissance",
+    "faction": "Generic",
+    "kind": "Core",
+    "unique": null,
+    "url": "https://www.tabletopbattles.com/detachment-focus-gauntlet-task-force/"
+  },
+  {
+    "name": "Gladius Task Force",
+    "dp": 3,
+    "dispositions": [
+      "Take and Hold",
+      "Priority Assets"
+    ],
+    "dispositionText": "Priority Assets or Take and Hold",
+    "faction": "Generic",
+    "kind": "Core",
+    "unique": null,
+    "url": "https://www.tabletopbattles.com/detachment-focus-gladius-task-force/"
+  },
+  {
+    "name": "Gravis Linebreaker Force",
+    "dp": 1,
+    "dispositions": [
+      "Take and Hold"
+    ],
+    "dispositionText": "Take and Hold",
+    "faction": "Generic",
+    "kind": "Core",
+    "unique": "GRAVIS",
+    "url": "https://www.tabletopbattles.com/detachment-focus-gravis-linebreaker-force/"
+  },
+  {
+    "name": "Gravis Siege Force",
+    "dp": 1,
+    "dispositions": [
+      "Take and Hold"
+    ],
+    "dispositionText": "Take and Hold",
+    "faction": "Generic",
+    "kind": "Core",
+    "unique": "GRAVIS",
+    "url": "https://www.tabletopbattles.com/detachment-focus-gravis-siege-force/"
+  },
+  {
+    "name": "Inner Circle Task Force",
+    "dp": 1,
+    "dispositions": [
+      "Priority Assets"
+    ],
+    "dispositionText": "Priority Assets",
+    "faction": "Dark Angels",
+    "kind": "Datasheet",
+    "unique": null,
+    "url": "https://www.tabletopbattles.com/detachment-focus-inner-circle-task-force/"
+  },
+  {
+    "name": "Ironclad Champions",
+    "dp": 1,
+    "dispositions": [
+      "Priority Assets"
+    ],
+    "dispositionText": "Priority Assets",
+    "faction": "Generic",
+    "kind": "Core",
+    "unique": null,
+    "url": "https://www.tabletopbattles.com/detachment-focus-ironclad-champions/"
+  },
+  {
+    "name": "Ironstorm Spearhead",
+    "dp": 1,
+    "dispositions": [
+      "Purge the Foe"
+    ],
+    "dispositionText": "Purge the Foe",
+    "faction": "Generic",
+    "kind": "Core",
+    "unique": null,
+    "url": "https://www.tabletopbattles.com/detachment-focus-ironstorm-spearhead/"
+  },
+  {
+    "name": "Marshal's Household",
+    "dp": 1,
+    "dispositions": [
+      "Priority Assets"
+    ],
+    "dispositionText": "Priority Assets",
+    "faction": "Black Templars",
+    "kind": "Datasheet",
+    "unique": null,
+    "url": "https://www.tabletopbattles.com/detachment-focus-marshals-household/"
+  },
+  {
+    "name": "Medusa's Wrath",
+    "dp": 2,
+    "dispositions": [
+      "Purge the Foe"
+    ],
+    "dispositionText": "Purge the Foe",
+    "faction": "Iron Hands",
+    "kind": "Datasheet",
+    "unique": "IRONSTORM",
+    "url": "https://www.tabletopbattles.com/detachment-focus-medusas-wrath/"
+  },
+  {
+    "name": "Phobos Shadow Force",
+    "dp": 1,
+    "dispositions": [
+      "Disruption"
+    ],
+    "dispositionText": "Disruption",
+    "faction": "Generic",
+    "kind": "Core",
+    "unique": "PHOBOS",
+    "url": "https://www.tabletopbattles.com/detachment-focus-phobos-shadow-force/"
+  },
+  {
+    "name": "Phobos Shock Force",
+    "dp": 1,
+    "dispositions": [
+      "Disruption"
+    ],
+    "dispositionText": "Disruption",
+    "faction": "Generic",
+    "kind": "Core",
+    "unique": "PHOBOS",
+    "url": "https://www.tabletopbattles.com/detachment-focus-phobos-shock-force/"
+  },
+  {
+    "name": "Saga of the Beastslayer",
+    "dp": 1,
+    "dispositions": [
+      "Purge the Foe"
+    ],
+    "dispositionText": "Purge the Foe",
+    "faction": "Space Wolves",
+    "kind": "Datasheet",
+    "unique": null,
+    "url": "https://www.tabletopbattles.com/detachment-focus-saga-of-the-beastslayer/"
+  },
+  {
+    "name": "Shadowmark Talon",
+    "dp": 1,
+    "dispositions": [
+      "Disruption"
+    ],
+    "dispositionText": "Disruption",
+    "faction": "Raven Guard",
+    "kind": "Datasheet",
+    "unique": null,
+    "url": "https://www.tabletopbattles.com/detachment-focus-shadowmark-talon-and-aethon-shaan/"
+  },
+  {
+    "name": "Spearpoint Task Force",
+    "dp": 2,
+    "dispositions": [
+      "Reconnaissance"
+    ],
+    "dispositionText": "Reconnaissance",
+    "faction": "White Scars",
+    "kind": "Datasheet",
+    "unique": null,
+    "url": "https://www.tabletopbattles.com/detachment-focus-spearpoint-task-force/"
+  },
+  {
+    "name": "Stormlance Task Force",
+    "dp": 1,
+    "dispositions": [
+      "Reconnaissance"
+    ],
+    "dispositionText": "Reconnaissance",
+    "faction": "Generic",
+    "kind": "Core",
+    "unique": null,
+    "url": "https://www.tabletopbattles.com/detachment-focus-stormlance-task-force/"
+  },
+  {
+    "name": "Tactical Brethren",
+    "dp": 1,
+    "dispositions": [
+      "Priority Assets"
+    ],
+    "dispositionText": "Priority Assets",
+    "faction": "Generic",
+    "kind": "Core",
+    "unique": "DOCTRINES",
+    "url": "https://www.tabletopbattles.com/detachment-focus-tactical-brethren/"
+  },
+  {
+    "name": "Tacticus Attack Force",
+    "dp": 1,
+    "dispositions": [
+      "Take and Hold"
+    ],
+    "dispositionText": "Take and Hold",
+    "faction": "Generic",
+    "kind": "Core",
+    "unique": "TACTICUS",
+    "url": "https://www.tabletopbattles.com/detachment-focus-tacticus-attack-force/"
+  },
+  {
+    "name": "Tacticus Firestorm Force",
+    "dp": 1,
+    "dispositions": [
+      "Priority Assets"
+    ],
+    "dispositionText": "Priority Assets",
+    "faction": "Generic",
+    "kind": "Core",
+    "unique": "TACTICUS",
+    "url": "https://www.tabletopbattles.com/detachment-focus-tacticus-firestorm-force/"
+  },
+  {
+    "name": "Terminator Storm Force",
+    "dp": 1,
+    "dispositions": [
+      "Priority Assets"
+    ],
+    "dispositionText": "Priority Assets",
+    "faction": "Generic",
+    "kind": "Core",
+    "unique": null,
+    "url": "https://www.tabletopbattles.com/detachment-focus-terminator-storm-force/"
+  },
+  {
+    "name": "Vow-sworn Crusaders",
+    "dp": 2,
+    "dispositions": [
+      "Purge the Foe"
+    ],
+    "dispositionText": "Purge the Foe",
+    "faction": "Black Templars",
+    "kind": "Datasheet",
+    "unique": null,
+    "url": "https://www.tabletopbattles.com/detachment-focus-vow-sworn-crusaders/"
+  },
+  {
+    "name": "Wrath of the Doomed",
+    "dp": 1,
+    "dispositions": [
+      "Purge the Foe"
+    ],
+    "dispositionText": "Purge the Foe",
+    "faction": "Blood Angels",
+    "kind": "Datasheet",
+    "unique": null,
+    "url": "https://www.tabletopbattles.com/detachment-focus-wrath-of-the-doomed/"
+  },
+  {
+    "name": "Wrath of the Rock",
+    "dp": 1,
+    "dispositions": [
+      "Take and Hold"
+    ],
+    "dispositionText": "Take and Hold",
+    "faction": "Dark Angels",
+    "kind": "Datasheet",
+    "unique": null,
+    "url": "https://www.tabletopbattles.com/detachment-focus-wrath-of-the-rock/"
+  }
+];
+
+const els = {
+  name: document.getElementById('f-name'),
+  cost: document.getElementById('f-cost'),
+  disp: document.getElementById('f-disp'),
+  faction: document.getElementById('f-faction'),
+  rows: document.getElementById('rows'),
+  count: document.getElementById('count'),
+  reset: document.getElementById('reset'),
+};
+
+let sort = { key: 'name', dir: 1 };
+
+// Empty set = no restriction on that column.
+const picked = { cost: new Set(), disp: new Set(), faction: new Set() };
+
+function buildToggles(container, key, values, label) {
+  for (const v of values) {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'toggle';
+    b.value = String(v);
+    b.textContent = label ? label(v) : String(v);
+    b.setAttribute('aria-pressed', 'false');
+    b.addEventListener('click', () => {
+      const set = picked[key];
+      if (set.has(b.value)) set.delete(b.value); else set.add(b.value);
+      b.setAttribute('aria-pressed', set.has(b.value) ? 'true' : 'false');
+      render();
+    });
+    container.appendChild(b);
+  }
+}
+buildToggles(els.cost, 'cost', [...new Set(DATA.map(d => d.dp))].sort((a, b) => a - b), v => v + ' DP');
+buildToggles(els.disp, 'disp', [...new Set(DATA.flatMap(d => d.dispositions))].sort());
+buildToggles(els.faction, 'faction', [...new Set(DATA.map(d => d.faction))].sort());
+
+function sortValue(d, key) {
+  if (key === 'dp') return d.dp;
+  if (key === 'disp') return d.dispositionText.toLowerCase();
+  if (key === 'faction') return d.faction.toLowerCase();
+  return d.name.toLowerCase();
+}
+
+function render() {
+  const q = els.name.value.trim().toLowerCase();
+
+  const shown = DATA.filter(d =>
+    (!q || d.name.toLowerCase().includes(q)) &&
+    (!picked.cost.size || picked.cost.has(String(d.dp))) &&
+    (!picked.disp.size || d.dispositions.some(x => picked.disp.has(x))) &&
+    (!picked.faction.size || picked.faction.has(d.faction))
+  ).sort((a, b) => {
+    const x = sortValue(a, sort.key), y = sortValue(b, sort.key);
+    if (x < y) return -sort.dir;
+    if (x > y) return sort.dir;
+    return a.name.localeCompare(b.name);
+  });
+
+  els.count.textContent = shown.length + ' of ' + DATA.length + ' detachments';
+  els.rows.innerHTML = '';
+
+  if (!shown.length) {
+    const tr = document.createElement('tr');
+    const td = document.createElement('td');
+    td.colSpan = 4;
+    td.className = 'empty';
+    td.textContent = 'No detachments match these filters.';
+    tr.appendChild(td);
+    els.rows.appendChild(tr);
+    return;
+  }
+
+  for (const d of shown) {
+    const tr = document.createElement('tr');
+
+    const tdName = document.createElement('td');
+    const a = document.createElement('a');
+    a.href = d.url;
+    a.target = '_blank';
+    a.rel = 'noopener';
+    a.textContent = d.name;
+    tdName.appendChild(a);
+
+    const tdDp = document.createElement('td');
+    tdDp.className = 'dp';
+    tdDp.textContent = d.dp + ' DP';
+
+    const tdDisp = document.createElement('td');
+    const joiner = / and /i.test(d.dispositionText) ? 'and' : 'or';
+    d.dispositions.forEach((name, i) => {
+      if (i) {
+        const j = document.createElement('span');
+        j.className = 'join';
+        j.textContent = joiner;
+        tdDisp.appendChild(j);
+      }
+      const c = document.createElement('span');
+      c.className = 'chip';
+      c.textContent = name;
+      tdDisp.appendChild(c);
+    });
+
+    const tdFaction = document.createElement('td');
+    tdFaction.textContent = d.faction;
+
+    tr.append(tdName, tdDp, tdDisp, tdFaction);
+    els.rows.appendChild(tr);
+  }
+}
+
+document.querySelectorAll('thead th').forEach(th => {
+  th.addEventListener('click', () => {
+    const key = th.dataset.key;
+    sort = { key, dir: sort.key === key ? -sort.dir : 1 };
+    document.querySelectorAll('thead th').forEach(h => {
+      h.removeAttribute('aria-sort');
+      h.querySelector('.arrow').textContent = '▲';
+    });
+    th.setAttribute('aria-sort', sort.dir === 1 ? 'ascending' : 'descending');
+    th.querySelector('.arrow').textContent = sort.dir === 1 ? '▲' : '▼';
+    render();
+  });
+});
+
+els.name.addEventListener('input', render);
+els.reset.addEventListener('click', () => {
+  els.name.value = '';
+  for (const set of Object.values(picked)) set.clear();
+  document.querySelectorAll('.toggle').forEach(b => b.setAttribute('aria-pressed', 'false'));
+  render();
+});
+
+render();
+</script>
+</body>
+</html>
